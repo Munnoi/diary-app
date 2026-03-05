@@ -30,7 +30,8 @@ const App = () => {
     <EntryContext.Provider value={{entries}}>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/add-entry" element={<AddEntry />} />
+        <Route path="/add-entry/" element={<AddEntry />} />
+        <Route path="/edit/:id" element={<AddEntry />} />
         <Route path="/entry-detail/:id" element={<EntryDetail />} />
       </Routes>
     </EntryContext.Provider>

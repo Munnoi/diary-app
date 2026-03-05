@@ -33,6 +33,10 @@ const EntryDetail = () => {
     }
   };
 
+  const editEntryHandler = async () => {
+    navigate(`/edit/${entry.id}`);
+  };
+
   return (
     <div className="flex flex-col items-center gap-20 py-10">
       <Link
@@ -47,7 +51,7 @@ const EntryDetail = () => {
       </div>
 
       <div className="w-5xl flex items-center justify-between">
-        <button className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition duration-300">
+        <button onClick={editEntryHandler} className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition duration-300">
           Edit Entry
         </button>
         <button
