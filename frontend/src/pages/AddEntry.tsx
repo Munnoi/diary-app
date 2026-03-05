@@ -51,8 +51,8 @@ const AddEntry = () => {
         if (!response.ok) {
           throw new Error("Failed to update entry");
         }
-        setTitle("");
-        setEntry("");
+        // setTitle("");
+        // setEntry("");
 
         alert("Entry updated successfully!");
       } else {

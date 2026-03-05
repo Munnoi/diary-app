@@ -45,9 +45,9 @@ const EntryDetail = () => {
       >
         Back to Home
       </Link>
-      <div className="max-w-5xl bg-gray-100 p-4 rounded shadow mt-4 text-center">
+      <div className="w-5xl bg-gray-100 p-4 rounded shadow mt-4 text-center">
         <h2 className="text-xl font-bold mb-2">{entry?.title}</h2>
-        <p className="text-lg text-left">{entry?.content}</p>
+        <p className="text-lg text-justify">{entry?.content}</p>
       </div>
 
       <div className="w-5xl flex items-center justify-between">
