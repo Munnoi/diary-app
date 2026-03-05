@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const AddEntry = () => {
   const [title, setTitle] = useState<string>("");
@@ -34,7 +35,7 @@ const AddEntry = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center py-10">
       <div className="flex flex-col gap-2 shadow-lg p-6 rounded bg-purple-300">
         <input
           type="text"

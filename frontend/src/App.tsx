@@ -24,7 +24,8 @@ const App = () => {
       }
     };
     fetchEntries();
-  }, []);
+  }, [entries]);
+
   return (
     <EntryContext.Provider value={{entries}}>
       <Routes>

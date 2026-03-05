@@ -1,7 +1,5 @@
-import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { EntryContext, useEntry } from "../context/EntryContext";
-import type { DiaryEntry } from "../constants/types";
+import { useEntry } from "../context/EntryContext";
 
 const Home = () => {
   const navigate = useNavigate();
