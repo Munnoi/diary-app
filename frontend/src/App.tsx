@@ -4,10 +4,8 @@ import Home from "./pages/Home.tsx";
 import EntryDetail from "./pages/EntryDetail.tsx";
 import { useEffect, useState, type JSX } from "react";
 import { EntryContext, EntryProvider } from "./context/EntryContext.tsx";
-import type { DiaryEntry } from "./constants/types.ts";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
-import { apiFetch } from "./services/api.ts";
 
 type Props = { children: JSX.Element };
 
