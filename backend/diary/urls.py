@@ -1,10 +1,12 @@
 from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
 
 urlpatterns = [
-    path("entries/", views.diary_entry_list, name="diary_entry_list"),
-    path("entries/add/", views.add_diary_entry, name="add_diary_entry"),
-    path("entries/edit/<int:pk>/", views.edit_diary_entry, name="edit_diary_entry"),
-    path("entries/delete/<int:pk>/", views.delete_diary_entry, name="delete_diary_entry"),
-    path("entries/<int:pk>/", views.diary_entry_detail, name="diary_entry_detail"),
+    path("auth/register/", views.RegisterView.as_view()),
+    path("auth/login/", TokenObtainPairView.as_view()),
+    path("auth/refresh/", TokenRefreshView.as_view()),
+    
+    path("entries/", views.EntryListCreateView.as_view(), name="entry-list-create"),
+    path("entries/<int:pk>/", views.EntryDetailView.as_view(), name="entry-detail"),
 ]

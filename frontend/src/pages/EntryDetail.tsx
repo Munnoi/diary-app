@@ -1,5 +1,6 @@
 import { useEntry } from "../context/EntryContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { apiFetch } from "../services/api";
 
 const EntryDetail = () => {
   const navigate = useNavigate();
@@ -14,8 +15,8 @@ const EntryDetail = () => {
     if (!shouldDelete) return;
 
     try {
-      const response = await fetch(
-        `http://localhost:8000/api/entries/delete/${entry.id}/`,
+      const response = await apiFetch(
+        `/entries/${entry.id}/`,
         {
           method: "DELETE",
         },

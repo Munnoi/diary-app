@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { apiFetch } from "../services/api.ts";
 
 const AddEntry = () => {
   const [title, setTitle] = useState<string>("");
@@ -8,77 +9,64 @@ const AddEntry = () => {
   const { id } = useParams<{ id: string }>();
   const isEditMode = Boolean(id);
 
+  const navigate = useNavigate();
+
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("access");
+    if (!token) {
+      navigate("/login");
+      throw new Error("No access token");
+    }
+    return {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+  };
+
   useEffect(() => {
     const loadOldValues = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/api/entries/${id}/`,
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch entry details");
-        }
+        const response = await apiFetch(`/entries/${id}/`, {
+          method: "GET",
+          headers: getAuthHeaders(),
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch entry details");
         const data = await response.json();
-        setTitle(data.title);
-        setEntry(data.content);
+        setTitle(data.title ?? "");
+        setEntry(data.content ?? "");
       } catch (err) {
         console.error(err);
-        throw err;
       }
     };
-    if (isEditMode) {
-      loadOldValues();
-      console.log(title, entry);
-    }
+
+    if (isEditMode) loadOldValues();
   }, [id, isEditMode]);
 
   const addEntryHandler = async () => {
     try {
-      if (isEditMode) {
-        const response = await fetch(
-          `http://localhost:8000/api/entries/edit/${id}/`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              title,
-              content: entry,
-            }),
-          },
-        );
+      const headers = getAuthHeaders();
 
-        if (!response.ok) {
-          throw new Error("Failed to update entry");
-        }
-        // setTitle("");
-        // setEntry("");
+      const response = await apiFetch(
+        isEditMode ? `/entries/${id}/` : "/entries/",
+        {
+          method: isEditMode ? "PUT" : "POST",
+          headers,
+          body: JSON.stringify({ title, content: entry }),
+        },
+      );
 
-        alert("Entry updated successfully!");
-      } else {
-        const response = await fetch("http://localhost:8000/api/entries/add/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title,
-            content: entry,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to add entry");
-        }
-
-        setTitle("");
-        setEntry("");
-
-        alert("Entry added successfully!");
+      if (!response.ok) {
+        console.log(response.status, await response.text());
+        throw new Error(`Request failed: ${response.status}`);
       }
+      alert(
+        isEditMode
+          ? "Entry updated successfully!"
+          : "Entry added successfully!",
+      );
     } catch (err) {
       console.error(err);
-      throw err;
     }
   };
 
