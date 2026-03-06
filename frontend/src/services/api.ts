@@ -41,8 +41,8 @@ export async function apiFetch(path: string, options: FetchOptions = {}) {
   });
 
   if (res.status === 401 && auth) {
-    const newAccess = await refreshAccessToken();
-    if (newAccess) {
+    try {
+      const newAccess = await refreshAccessToken();
       res = await fetch(`${BASE_URL}${path}`, {
         ...rest,
         headers: {
@@ -50,6 +50,10 @@ export async function apiFetch(path: string, options: FetchOptions = {}) {
           Authorization: `Bearer ${newAccess}`,
         },
       });
+    } catch {
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
+      throw new Error("SESSION_EXPIRED");
     }
   }
 
@@ -86,4 +90,12 @@ export async function register(username: string, password: string) {
 export async function logout() {
   localStorage.removeItem("access");
   localStorage.removeItem("refresh");
+}
+
+export async function getMe() {
+  const res = await apiFetch("/auth/me/");
+  if (!res.ok) {
+    throw new Error("Failed to fetch user info");
+  }
+  return res.json();
 }

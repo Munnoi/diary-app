@@ -50,3 +50,10 @@ class EntryDetailView(generics.RetrieveUpdateDestroyAPIView): # New class-based 
 
     def get_queryset(self):
         return DiaryEntry.objects.filter(user=self.request.user)
+
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        return Response({"username": user.username})

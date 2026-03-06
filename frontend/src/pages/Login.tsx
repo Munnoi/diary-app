@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "../services/api.ts";
+import { useEntry } from "../context/EntryContext.tsx";
 
 export default function Login() {
   const nav = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const { refreshEntries } = useEntry();
+  
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await login(username, password);
+      await refreshEntries();
       nav("/");
     } catch (err) {
         console.error("Login failed:", err);

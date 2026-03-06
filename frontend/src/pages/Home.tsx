@@ -1,15 +1,31 @@
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useEntry } from "../context/EntryContext";
+import { getMe, logout } from "../services/api";
 
 const Home = () => {
+  const [user, setUser] = useState<string>("");
   const navigate = useNavigate();
-  const entries = useEntry()?.entries || [];
+  const { entries, setEntries, refreshEntries } = useEntry();
+
+  useEffect(() => {
+    getMe()
+      .then((user) => setUser(user.username))
+      .catch(console.error);
+    refreshEntries();
+  }, []);
+
+  const logoutHandler = async () => {
+    await logout();
+    setEntries([]); 
+    navigate("/login");
+  }
 
   return (
     <div className="flex flex-col items-center gap-20 py-10">
       <div>
         <h1 className="text-4xl font-bold text-center">
-          Welcome to Your Diary
+          Welcome to Your Diary {user ? `, ${user}` : ""}!
         </h1>
         <p className="text-center mt-4 text-lg">
           Your personal space to jot down thoughts, feelings, and experiences.
@@ -33,6 +49,12 @@ const Home = () => {
           </Link>
         ))}
       </div>
+      <button
+        onClick={logoutHandler}
+        className="bg-red-500 text-white px-6 py-3 rounded hover:bg-red-600 transition duration-300"
+      >
+        Logout
+      </button>
     </div>
   );
 };

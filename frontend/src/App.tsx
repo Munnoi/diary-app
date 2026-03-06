@@ -3,7 +3,7 @@ import AddEntry from "./pages/AddEntry.tsx";
 import Home from "./pages/Home.tsx";
 import EntryDetail from "./pages/EntryDetail.tsx";
 import { useEffect, useState, type JSX } from "react";
-import { EntryContext } from "./context/EntryContext.tsx";
+import { EntryContext, EntryProvider } from "./context/EntryContext.tsx";
 import type { DiaryEntry } from "./constants/types.ts";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
@@ -17,27 +17,8 @@ function PrivateRoute({ children }: Props) {
 }
 
 const App = () => {
-  const [entries, setEntries] = useState<DiaryEntry[]>([]);
-
-  useEffect(() => {
-    const fetchEntries = async () => {
-      try {
-        const response = await apiFetch("/entries/");
-        if (!response.ok) {
-          throw new Error("Failed to fetch entries");
-        }
-        const data = await response.json();
-        setEntries(data);
-      } catch (err) {
-        console.error(err);
-        throw err;
-      }
-    };
-    fetchEntries();
-  }, [entries]);
-
   return (
-    <EntryContext.Provider value={{ entries }}>
+    <EntryProvider>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -75,7 +56,7 @@ const App = () => {
           }
         />
       </Routes>
-    </EntryContext.Provider>
+    </EntryProvider>
   );
 };
 
