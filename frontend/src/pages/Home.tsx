@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useEntry } from "../context/EntryContext";
-import { getMe, logout } from "../services/api";
+import { deleteAccount, getMe, logout } from "../services/api";
 
 const Home = () => {
   const [user, setUser] = useState<string>("");
@@ -17,8 +17,20 @@ const Home = () => {
 
   const logoutHandler = async () => {
     await logout();
-    setEntries([]); 
+    setEntries([]);
     navigate("/login");
+  };
+
+  const deleteAccountHandler = async () => {
+    const shouldDelete = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
+    if (!shouldDelete) return;
+    try {
+      await deleteAccount();
+      setEntries([]);
+      navigate("/register");
+    } catch (err) {
+      console.error("Failed to delete account:", err);
+    }
   }
 
   return (
@@ -49,12 +61,16 @@ const Home = () => {
           </Link>
         ))}
       </div>
-      <button
-        onClick={logoutHandler}
-        className="bg-red-500 text-white px-6 py-3 rounded hover:bg-red-600 transition duration-300"
-      >
-        Logout
-      </button>
+      <div>
+        <button
+          onClick={logoutHandler}
+          className="bg-red-500 text-white px-6 py-3 rounded hover:bg-red-600 transition duration-300"
+        >
+          Logout
+        </button>
+        <button onClick={deleteAccountHandler} className="bg-red-700 text-white px-6 py-3 rounded hover:bg-red-800 transition duration-300 ml-4
+        ">Delete account</button>
+      </div>
     </div>
   );
 };

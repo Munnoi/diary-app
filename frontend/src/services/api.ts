@@ -69,7 +69,13 @@ export async function login(username: string, password: string) {
 
   const data = await response.json();
   if (!response.ok || !data.access || !data.refresh) {
-    throw new Error(`Login failed: ${JSON.stringify(data)}`);
+    const raw = data?.detail || "";
+    if (raw.includes("No active account found")) {
+      throw new Error(
+        "Account not found. Please register first or check your credentials.",
+      );
+    }
+    throw new Error("Login failed. Please try again.");
   }
   localStorage.setItem("access", data.access);
   localStorage.setItem("refresh", data.refresh);
@@ -98,4 +104,15 @@ export async function getMe() {
     throw new Error("Failed to fetch user info");
   }
   return res.json();
+}
+
+export async function deleteAccount() {
+  const res = await apiFetch("/auth/delete/", {
+    method: "DELETE",
+  });
+  if (!res.ok) {
+    throw new Error("Failed to delete account");
+  }
+  localStorage.removeItem("access");
+  localStorage.removeItem("refresh");
 }

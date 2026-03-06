@@ -7,17 +7,20 @@ export default function Login() {
   const nav = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const { refreshEntries } = useEntry();
   
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
     try {
       await login(username, password);
       await refreshEntries();
       nav("/");
     } catch (err) {
         console.error("Login failed:", err);
+        setError(err instanceof Error ? err.message : "Login failed");
     }
   };
 
@@ -45,6 +48,7 @@ export default function Login() {
           >
             Login
           </button>
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
           <p className="text-center mt-4">
             Don't have an account?{" "}
             <Link to="/register" className="text-purple-600 hover:underline">

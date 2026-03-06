@@ -33,6 +33,20 @@ class LoginView(APIView):
         else:
             return Response({"error": "Invalid credentials"}, status=400)
 
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        return Response({"username": user.username})
+
+class DeleteAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        user = request.user
+        user.delete()
+        return Response({"message": "Account deleted successfully"})
 
 class EntryListCreateView(generics.ListCreateAPIView): # New class-based view for listing and creating diary entries
     serializer_class = DiaryEntrySerializer
@@ -50,10 +64,3 @@ class EntryDetailView(generics.RetrieveUpdateDestroyAPIView): # New class-based 
 
     def get_queryset(self):
         return DiaryEntry.objects.filter(user=self.request.user)
-
-class MeView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        user = request.user
-        return Response({"username": user.username})
