@@ -25,37 +25,61 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="p-8 bg-white rounded shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-        <form onSubmit={submit} className="flex flex-col gap-4">
-          <input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-            className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
-          <button
-            type="submit"
-            className="p-3 bg-purple-600 text-white rounded hover:bg-purple-700 transition duration-300"
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-fuchsia-50 px-4">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-extrabold text-slate-900">Welcome back</h1>
+          <p className="mt-2 text-sm text-slate-400">Sign in to your diary</p>
+        </div>
+
+        <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg shadow-rose-100/50 border border-white/60 overflow-hidden">
+          <div className="h-1.5 bg-gradient-to-r from-pink-400 via-rose-500 to-fuchsia-500" />
+
+          <form onSubmit={submit} className="flex flex-col gap-5 p-8">
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-widest text-rose-500 mb-2">
+                Username
+              </label>
+              <input
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter your username"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/70 text-slate-800 placeholder-slate-300 outline-none focus:border-rose-300 focus:ring-2 focus:ring-rose-100 transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-widest text-rose-500 mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/70 text-slate-800 placeholder-slate-300 outline-none focus:border-rose-300 focus:ring-2 focus:ring-rose-100 transition-all"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white py-3 rounded-xl text-sm font-semibold shadow-md shadow-rose-200 hover:shadow-lg hover:shadow-rose-300 hover:-translate-y-0.5 active:translate-y-0 transition-all"
+            >
+              Sign In
+            </button>
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            )}
+          </form>
+        </div>
+
+        <p className="text-center mt-6 text-sm text-slate-400">
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="font-semibold text-rose-500 hover:text-rose-600 transition-colors"
           >
-            Login
-          </button>
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-          <p className="text-center mt-4">
-            Don't have an account?{" "}
-            <Link to="/register" className="text-purple-600 hover:underline">
-              Create one
-            </Link>
-          </p>
-        </form>
+            Create one
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -53,7 +53,7 @@ class EntryListCreateView(generics.ListCreateAPIView): # New class-based view fo
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return DiaryEntry.objects.filter(user=self.request.user).order_by('-created_at')
+        return DiaryEntry.objects.filter(user=self.request.user).order_by('-updated_at')
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
